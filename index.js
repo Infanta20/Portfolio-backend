@@ -8,12 +8,12 @@ const app = express();
 // ============= MIDDLEWARE =============
 app.use(express.json());
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: process.env.CLIENT_URL,
   credentials: true
 }));
 
 // ============= MONGODB CONNECTION =============
-mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://username:password@cluster.mongodb.net/portfolio?retryWrites=true&w=majority')
+mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('✅ MongoDB Connected'))
   .catch((err) => console.error('❌ MongoDB Error:', err));
 
@@ -58,7 +58,7 @@ const verifyFirebaseToken = (req, res, next) => {
 
 // ============= ROUTES =============
 
-// ===== HEALTH CHECK =====
+
 app.get('/api/health', (req, res) => {
   res.json({ message: '✅ Server running', timestamp: new Date() });
 });
@@ -112,7 +112,6 @@ app.get('/api/auth/profile', async (req, res) => {
 
 // ===== PROJECT ROUTES =====
 
-// Get All Projects (Public)
 app.get('/api/projects', async (req, res) => {
   try {
     const { tag, search } = req.query;
